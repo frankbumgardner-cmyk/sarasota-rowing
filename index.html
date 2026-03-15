@@ -79,8 +79,12 @@
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
+    // --- CONNECT TO YOUR GOOGLE URL ---
     const CLOUD_URL = "https://script.google.com/macros/s/AKfycbxZ9kBcAbtcwffh-MmhpjBOlHihSvg-DW3Ff24k6KVFBy4tCmM4tFvQz_MA6h9yA12i/exec";
-    const SECRET_SQUAD_CODE = "SARASOTA26"; // CHANGE THIS IF YOU WANT
+    
+    // --- YOUR SECRET SQUAD CODE ---
+    const SECRET_SQUAD_CODE = "SARASOTA26"; 
+    
     const GOAL_METERS = 1850746, MILE_TO_METER = 1609.34;
     const TEAM_CONFIG = { frank:{color:'#22c55e'}, hillary:{color:'#800080'}, molly:{color:'#008080'}, avery:{color:'#FF1493'}, ella:{color:'#FF0000'} };
     const MILESTONES = [{m:0,name:"Warsaw, IN"}, {m:376586,name:"Louisville, KY"}, {m:658231,name:"Nashville, TN"}, {m:1062166,name:"Atlanta, GA"}, {m:1443606,name:"Florida Line"}, {m:1850746,name:"Sarasota, FL"}];
@@ -103,18 +107,22 @@
     async function loadCloudData() {
         try {
             const resp = await fetch(CLOUD_URL);
-            entries = await resp.json();
+            const rawData = await resp.json();
+            // Ensure data is sorted by timestamp (newest at bottom for total calcs)
+            entries = rawData.filter(e => e.meters).sort((a,b) => new Date(a.timestamp) - new Date(b.timestamp));
             updateApp();
             document.getElementById('sync-status').style.background = "#22c55e";
             document.getElementById('sync-status').innerText = "✅ CLOUD SYNC ACTIVE";
-        } catch (e) { document.getElementById('sync-status').innerText = "❌ CLOUD ERROR"; }
+        } catch (e) { 
+            document.getElementById('sync-status').style.background = "#ef4444";
+            document.getElementById('sync-status').innerText = "❌ CLOUD ERROR"; 
+        }
     }
 
     function updateApp() {
         const now = new Date(), todayStr = now.toLocaleDateString();
         const total = entries.reduce((s, e) => s + (parseFloat(e.meters)||0), 0);
-        const sorted = [...entries].sort((a,b) => new Date(a.timestamp) - new Date(b.timestamp));
-
+        
         currentPos = roadPoints[Math.floor(Math.min(total / GOAL_METERS, 1) * (roadPoints.length - 1))];
         rowerMarker.setLatLng(currentPos);
         map.setView(currentPos, 11);
@@ -125,7 +133,7 @@
         const target = Math.round((GOAL_METERS - total) / daysLeft);
         document.getElementById('daily-avg').innerText = target.toLocaleString();
 
-        const todayM = sorted.filter(e => new Date(e.timestamp).toLocaleDateString() === todayStr).reduce((s, e) => s + parseFloat(e.meters), 0);
+        const todayM = entries.filter(e => new Date(e.timestamp).toLocaleDateString() === todayStr).reduce((s, e) => s + parseFloat(e.meters), 0);
         document.getElementById('daily-countdown').innerText = Math.max(0, target - todayM).toLocaleString();
         document.getElementById('daily-bar-fill').style.width = (Math.min(todayM / target, 1) * 100) + "%";
         
@@ -148,12 +156,17 @@
         const btn = document.getElementById('log-btn');
         btn.disabled = true; btn.innerText = "SAVING...";
 
-        const newEntry = { name: n.value, meters: m.value === 'running' ? d.value * MILE_TO_METER : parseFloat(d.value), method: m.value, timestamp: new Date().toISOString() };
+        const newEntry = { 
+            name: n.value, 
+            meters: m.value === 'running' ? d.value * MILE_TO_METER : parseFloat(d.value), 
+            method: m.value, 
+            timestamp: new Date().toISOString() 
+        };
 
         try {
             await fetch(CLOUD_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(newEntry) });
             d.value = ''; p.value = '';
-            setTimeout(loadCloudData, 2000);
+            setTimeout(loadCloudData, 2500); // Give Google a moment to process
         } catch (e) { alert("Save failed!"); }
         btn.disabled = false; btn.innerText = "LOG";
     }
