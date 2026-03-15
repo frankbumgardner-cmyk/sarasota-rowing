@@ -9,47 +9,32 @@
         :root { --primary: #0f172a; --elite-gold: #fbbf24; --rower-blue: #0ea5e9; --success: #22c55e; --danger: #ef4444; }
         body { font-family: 'Arial Black', sans-serif; margin: 0; padding: 0; background-color: #111; min-height: 100vh; }
         .container { width: 100%; max-width: 950px; background: rgba(255, 255, 255, 0.96); padding: 30px; border-radius: 15px; box-shadow: 0 40px 80px rgba(0,0,0,0.8); margin: 20px auto; box-sizing: border-box; }
-
-        /* --- CLOUD STATUS --- */
         #sync-status { background: #334155; color: white; padding: 12px; text-align: center; font-weight: 900; font-size: 0.8rem; border-bottom: 3px solid rgba(0,0,0,0.2); }
-
         .motivation-header { background: linear-gradient(135deg, #020617 0%, #1e3a8a 100%); color: white; padding: 25px; border-radius: 12px; margin-bottom: 20px; border: 2px solid var(--elite-gold); text-align: center; }
         .daily-mission-container { background: #0f172a; padding: 20px; border-radius: 12px; margin-bottom: 25px; border: 2px solid var(--elite-gold); text-align: center; color: white; position: relative; }
         #victory-badge { display: none; background: var(--elite-gold); color: black; padding: 8px 20px; border-radius: 25px; font-size: 0.9rem; font-weight: 900; margin: 0 auto 15px; width: fit-content; animation: pulse-gold 1.5s infinite; }
         @keyframes pulse-gold { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
-
         .daily-countdown-num { font-size: 3.5rem; line-height: 1; color: var(--elite-gold); display: block; margin-bottom: 15px; }
         .daily-bar-bg { height: 16px; background: #334155; border-radius: 8px; overflow: hidden; border: 1px solid #475569; width: 90%; margin: 0 auto 10px; }
         #daily-bar-fill { height: 100%; width: 0%; background: var(--success); transition: width 1s ease; }
-
         .stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom: 20px; }
         .stat-card { background: #0f172a; padding: 15px; border-radius: 10px; text-align: center; color: white; border-bottom: 4px solid var(--rower-blue); }
         .stat-number { display: block; font-size: 1.4rem; font-weight: 900; margin-top: 5px; }
-
         .leaderboard { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; justify-content: center; }
         .member-chip { background: #0f172a; color: white; padding: 10px 15px; border-radius: 8px; border-bottom: 4px solid var(--elite-gold); font-weight: 900; font-size: 0.8rem; }
-        .daily-user-recon { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; justify-content: center; border-top: 1px solid #e2e8f0; padding-top: 10px; }
-        .daily-user-chip { padding: 6px 12px; border-radius: 6px; font-size: 0.7rem; font-weight: 900; color: white; }
-
         .input-box { background: #1e293b; padding: 20px; border-radius: 12px 12px 0 0; display: grid; grid-template-columns: 1fr 1fr 1fr 1.5fr auto; gap: 10px; align-items: end; color: white; border: 4px solid #0f172a; border-bottom: none; }
         select, input { padding: 10px; border: 2px solid var(--elite-gold); font-weight: bold; border-radius: 6px; width: 100%; box-sizing: border-box; }
         button.log-btn { background: var(--elite-gold); color: black; border: none; padding: 10px 20px; font-weight: 900; cursor: pointer; border-radius: 6px; height: 42px; }
-
         #map { height: 450px; width: 100%; border-radius: 0 0 12px 12px; border: 4px solid #0f172a; }
-        .map-wrap { position: relative; }
-        .map-controls { position: absolute; top: 15px; right: 15px; z-index: 1000; display: flex; flex-direction: column; gap: 5px; }
-        .map-btn { background: white; border: 2px solid #0f172a; padding: 8px 12px; font-weight: 900; font-size: 0.7rem; cursor: pointer; border-radius: 4px; width: 160px; text-align: center; }
-
-        .intel-hub { background: #0f172a; color: white; padding: 15px; border-radius: 8px; margin-top: 10px; border-left: 6px solid var(--elite-gold); }
         .history-list { max-height: 200px; overflow-y: auto; border: 1px solid #e2e8f0; background: white; border-radius: 10px; margin-top: 15px; }
         .history-item { display: grid; grid-template-columns: 1fr 0.8fr 1fr 1.2fr 0.4fr; align-items: center; padding: 10px; border-bottom: 1px solid #f1f5f9; font-size: 0.8rem; }
-        .audit-scroll { max-height: 250px; overflow-y: auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; margin-top: 10px; }
+        .audit-scroll { max-height: 250px; overflow-y: auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; margin-top: 30px; background: #f8fafc; padding: 15px; border-radius: 10px;}
         .audit-day { background: white; border: 1px solid #e2e8f0; padding: 8px; border-radius: 6px; font-size: 0.7rem; display: flex; flex-direction: column; }
     </style>
 </head>
 <body>
 
-<div id="sync-status">📡 CONNECTING TO CLOUD DATABASE...</div>
+<div id="sync-status">📡 CONNECTING TO CLOUD...</div>
 
 <div class="container">
     <div class="motivation-header">
@@ -72,7 +57,6 @@
     </div>
 
     <div class="leaderboard" id="leaderboard"></div>
-    <div class="daily-user-recon" id="daily-user-recon"></div>
 
     <div class="input-box" onkeydown="if(event.key==='Enter') addRow()">
         <div><label style="font-size:0.6rem; font-weight:900;">MEMBER</label>
@@ -82,37 +66,28 @@
             <select id="method-select" onchange="updateUnits()"><option value="rowing">ROWING</option><option value="running">RUNNING</option></select>
         </div>
         <div><label id="unit-label" style="font-size:0.6rem; font-weight:900;">METERS</label><input type="number" id="row-input" step="any"></div>
-        <div><label style="font-size:0.6rem; font-weight:900;">DATE</label><input type="datetime-local" id="time-input"></div>
+        <div><label style="font-size:0.6rem; font-weight:900;">SQUAD CODE</label><input type="password" id="squad-pass" placeholder="****"></div>
         <button id="log-btn" class="log-btn" onclick="addRow()">LOG</button>
     </div>
 
-    <div class="map-wrap">
-        <div class="map-controls">
-            <button class="map-btn" onclick="toggleView()">FULL JOURNEY</button>
-            <button class="map-btn" onclick="toggleSignatureMode()">ALL SIGNATURES</button>
-        </div>
-        <div id="map"></div>
-    </div>
-
-    <div class="intel-hub">
-        <div id="current-city" style="font-size: 1.1rem; color: var(--elite-gold); font-weight: 900;">Syncing position...</div>
-    </div>
+    <div id="map"></div>
+    <div id="current-city" style="background:#0f172a; color:white; padding:15px; border-radius:0 0 10px 10px; font-size:1.1rem; border-left:6px solid var(--elite-gold); font-weight:900;">Syncing position...</div>
 
     <div class="history-list" id="history-list"></div>
-
     <div class="audit-scroll" id="audit-log"></div>
 </div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
     const CLOUD_URL = "https://script.google.com/macros/s/AKfycbxZ9kBcAbtcwffh-MmhpjBOlHihSvg-DW3Ff24k6KVFBy4tCmM4tFvQz_MA6h9yA12i/exec";
+    const SECRET_SQUAD_CODE = "SARASOTA26"; // CHANGE THIS IF YOU WANT
     const GOAL_METERS = 1850746, MILE_TO_METER = 1609.34;
     const TEAM_CONFIG = { frank:{color:'#22c55e'}, hillary:{color:'#800080'}, molly:{color:'#008080'}, avery:{color:'#FF1493'}, ella:{color:'#FF0000'} };
     const MILESTONES = [{m:0,name:"Warsaw, IN"}, {m:376586,name:"Louisville, KY"}, {m:658231,name:"Nashville, TN"}, {m:1062166,name:"Atlanta, GA"}, {m:1443606,name:"Florida Line"}, {m:1850746,name:"Sarasota, FL"}];
     const START = [41.2381, -85.8531], END = [27.3615, -82.553];
     
-    let entries = [], map, rowerMarker, historyLine, signatureLines=[], roadPoints=[];
-    let isFullView=false, showAllSignatures=false, currentPos=START;
+    let entries = [], map, rowerMarker, roadPoints=[];
+    let currentPos=START;
 
     async function initMap() {
         map = L.map('map').setView([34.5, -84], 5);
@@ -121,8 +96,7 @@
         const data = await resp.json();
         roadPoints = data.routes[0].geometry.coordinates.map(c => [c[1], c[0]]);
         L.polyline(roadPoints, {color:'#94a3b8', weight:4, dashArray:'5, 10'}).addTo(map);
-        historyLine = L.polyline([], {color:'#0ea5e9', weight:8}).addTo(map);
-        rowerMarker = L.marker(START, { icon: L.divIcon({html:'<div style="font-size:38px;">🚣</div>', className:'rower-icon', iconSize:[40,40], iconAnchor:[20,20]}) }).addTo(map);
+        rowerMarker = L.marker(START, { icon: L.divIcon({html:'<div style="font-size:38px;">🚣</div>', iconSize:[40,40], iconAnchor:[20,20]}) }).addTo(map);
         loadCloudData();
     }
 
@@ -133,29 +107,17 @@
             updateApp();
             document.getElementById('sync-status').style.background = "#22c55e";
             document.getElementById('sync-status').innerText = "✅ CLOUD SYNC ACTIVE";
-        } catch (e) {
-            document.getElementById('sync-status').innerText = "❌ CLOUD OFFLINE - CHECK URL";
-        }
+        } catch (e) { document.getElementById('sync-status').innerText = "❌ CLOUD ERROR"; }
     }
 
     function updateApp() {
         const now = new Date(), todayStr = now.toLocaleDateString();
         const total = entries.reduce((s, e) => s + (parseFloat(e.meters)||0), 0);
-        signatureLines.forEach(l => map.removeLayer(l)); signatureLines = [];
         const sorted = [...entries].sort((a,b) => new Date(a.timestamp) - new Date(b.timestamp));
-
-        let draw = 0;
-        sorted.forEach(e => {
-            const sIdx = Math.floor(Math.min(draw / GOAL_METERS, 1) * (roadPoints.length - 1)); 
-            draw += parseFloat(e.meters);
-            const eIdx = Math.floor(Math.min(draw / GOAL_METERS, 1) * (roadPoints.length - 1));
-            const color = TEAM_CONFIG[e.name.toLowerCase()]?.color || '#000';
-            signatureLines.push(L.polyline(roadPoints.slice(sIdx, eIdx + 1), {color: color, weight: 12, opacity: 0.95}).addTo(map));
-        });
 
         currentPos = roadPoints[Math.floor(Math.min(total / GOAL_METERS, 1) * (roadPoints.length - 1))];
         rowerMarker.setLatLng(currentPos);
-        if(!isFullView) map.setView(currentPos, 11);
+        map.setView(currentPos, 11);
 
         document.getElementById('total-m').innerText = Math.round(total).toLocaleString();
         document.getElementById('remain-m').innerText = Math.max(0, Math.round(GOAL_METERS - total)).toLocaleString();
@@ -179,29 +141,25 @@
     }
 
     async function addRow() {
-        const d = document.getElementById('row-input'), n = document.getElementById('rower-select'), m = document.getElementById('method-select'), t = document.getElementById('time-input');
+        const d = document.getElementById('row-input'), n = document.getElementById('rower-select'), m = document.getElementById('method-select'), p = document.getElementById('squad-pass');
         if (!d.value || d.value <= 0) return;
+        if (p.value !== SECRET_SQUAD_CODE) { alert("WRONG CODE"); return; }
 
         const btn = document.getElementById('log-btn');
         btn.disabled = true; btn.innerText = "SAVING...";
 
-        const newEntry = {
-            name: n.value,
-            meters: m.value === 'running' ? d.value * MILE_TO_METER : parseFloat(d.value),
-            method: m.value,
-            timestamp: t.value
-        };
+        const newEntry = { name: n.value, meters: m.value === 'running' ? d.value * MILE_TO_METER : parseFloat(d.value), method: m.value, timestamp: new Date().toISOString() };
 
         try {
-            await fetch(CLOUD_URL, { method: 'POST', body: JSON.stringify(newEntry) });
-            d.value = '';
-            loadCloudData();
+            await fetch(CLOUD_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(newEntry) });
+            d.value = ''; p.value = '';
+            setTimeout(loadCloudData, 2000);
         } catch (e) { alert("Save failed!"); }
         btn.disabled = false; btn.innerText = "LOG";
     }
 
     function renderHistory() { 
-        document.getElementById('history-list').innerHTML = [...entries].reverse().slice(0,20).map(e => `<div class="history-item"><span>${new Date(e.timestamp).toLocaleDateString()}</span><span>${e.method.toUpperCase()}</span><strong>${Math.round(e.meters)}M</strong><span>${e.name.toUpperCase()}</span></div>`).join(''); 
+        document.getElementById('history-list').innerHTML = [...entries].reverse().slice(0,10).map(e => `<div class="history-item"><span>${new Date(e.timestamp).toLocaleDateString()}</span><span>${e.method.toUpperCase()}</span><strong>${Math.round(e.meters)}M</strong><span>${e.name.toUpperCase()}</span></div>`).join(''); 
     }
 
     function renderAudit(target) {
@@ -215,11 +173,6 @@
     }
 
     function updateUnits() { document.getElementById('unit-label').innerText = document.getElementById('method-select').value === 'rowing' ? 'METERS' : 'MILES'; }
-    function toggleView() { isFullView = !isFullView; if (isFullView) map.flyTo([34.5, -84], 5); else map.setView(currentPos, 11); }
-    
-    const tInput = document.getElementById('time-input');
-    const td = new Date(); td.setMinutes(td.getMinutes() - td.getTimezoneOffset());
-    tInput.value = td.toISOString().slice(0, 16);
     window.onload = initMap;
 </script>
 </body>
